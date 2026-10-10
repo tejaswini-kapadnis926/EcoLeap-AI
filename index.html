@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>EcoLeap AI — A landscape. A living system.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#071412;--g:#B8D9C1;--t:#72A89A;--w:#5FA8B8;--warn:#D69A55;--crit:#C96B62;--tx:#F2F3EA;--tx2:#A8B5AE;--ln:rgba(184,217,193,.15);--pn:rgba(7,20,18,.8)}
+*{box-sizing:border-box;margin:0}html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:Manrope,system-ui,sans-serif;color-scheme:dark;padding-top:env(safe-area-inset-top,0px)}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0;touch-action:pan-y}
+body.nogl{background:radial-gradient(ellipse at 60% 70%,#1d3a33,var(--bg) 70%)}
+header{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;height:56px;display:flex;align-items:center;gap:22px;padding:0 22px;z-index:6;background:linear-gradient(var(--bg),transparent)}
+header b{letter-spacing:.14em;font-size:14px}nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+nav a{color:var(--tx2);text-decoration:none;font-size:12.5px;font-weight:600;padding:8px 10px;border-radius:6px;white-space:nowrap}nav a:hover{color:var(--tx)}
+.dm{margin-left:auto;font-size:11px;color:var(--warn);border:1px solid rgba(214,154,85,.4);padding:4px 9px;border-radius:99px;white-space:nowrap}
+.sec{position:relative;z-index:2;min-height:100vh;display:flex;align-items:center;padding:84px 5vw 60px;pointer-events:none}
+.sec.r{justify-content:flex-end}.sec.c{justify-content:center;text-align:center}
+.box{pointer-events:auto;width:min(540px,100%);background:var(--pn);border:1px solid var(--ln);border-radius:14px;padding:28px;backdrop-filter:blur(8px);opacity:0;transform:translateY(18px);transition:opacity .8s,transform .8s}
+.box.in{opacity:1;transform:none}.box.wide{width:min(940px,100%)}.box.bare{background:none;border:0;backdrop-filter:none;padding:0;width:min(640px,100%)}
+h1{font-size:clamp(38px,6vw,76px);line-height:1.02;font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(24px,3vw,34px);line-height:1.15;font-weight:700;letter-spacing:-.01em;margin-bottom:10px}
+.sub{font-size:clamp(17px,2vw,22px);color:var(--tx2);margin:16px 0 26px}
+p{font-size:15px;line-height:1.6;color:var(--tx2)}.lbl{font-size:12px;font-weight:700;color:var(--t);margin-bottom:8px;letter-spacing:.04em}
+.btn{display:inline-block;border:1px solid var(--g);background:var(--g);color:var(--bg);font:700 13px Manrope;letter-spacing:.1em;padding:14px 22px;border-radius:9px;cursor:pointer;transition:background .2s,transform .15s;margin:0 10px 10px 0}
+.btn.o{background:none;color:var(--g)}.btn:hover{background:#cfe8d6;color:var(--bg)}.btn:disabled{opacity:.6;cursor:progress}
+.live{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--tx2);font-weight:600;margin-top:18px}.live i{color:var(--g);font-style:normal}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}.chip{background:none;border:1px solid var(--ln);color:var(--tx);font:600 12.5px Manrope;padding:8px 12px;border-radius:99px;cursor:pointer;transition:.2s}.chip:hover,.chip.on{border-color:var(--g);background:rgba(184,217,193,.1)}
+.tag{display:block;font-size:11.5px;color:var(--warn);margin-top:14px;font-weight:600}
+.g6{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}
+.gz{text-align:center;padding:14px 6px;border:1px solid var(--ln);border-radius:12px;transition:transform .2s,border-color .2s}.gz:hover{transform:translateY(-3px);border-color:rgba(184,217,193,.4)}
+.gz svg{width:84px;height:84px}.gz circle{fill:none;stroke-width:6}.gz .bgc{stroke:rgba(255,255,255,.08)}.gz .fg{stroke-linecap:round;transition:stroke-dashoffset 1.4s cubic-bezier(.2,.7,.2,1);transform:rotate(-90deg);transform-origin:50% 50%}
+.gz text{fill:var(--tx);font:700 22px Manrope;text-anchor:middle}.gz small{display:block;font-size:11.5px;color:var(--tx2);font-weight:600;margin-top:4px}.gz em{font-style:normal;font-size:11.5px}
+.ov{display:flex;align-items:baseline;gap:12px}.ov b{font-size:54px;line-height:1}.ov span{font-size:15px;font-weight:700}
+#net{width:100%;min-width:640px;height:auto}#netw{overflow-x:auto}
+.nd rect{fill:#0d2420;stroke:rgba(184,217,193,.3);transition:.25s}.nd text{fill:var(--tx);font:700 11.5px Manrope;text-anchor:middle;pointer-events:none}.nd{cursor:pointer;transition:opacity .25s}
+.nd:hover rect,.nd.hl rect{stroke:var(--g);fill:#143029}.net.f .nd:not(.hl){opacity:.28}.net.f .lk:not(.hl){opacity:.12}.lk{stroke:rgba(184,217,193,.35);stroke-width:1.3;fill:none;transition:.25s}.lk.d{stroke-dasharray:4 4}.lk.hl{stroke:var(--g)}.pt{fill:var(--g)}
+.scn{width:100%;text-align:left;background:none;border:1px solid var(--ln);border-radius:12px;padding:16px;color:var(--tx);font-family:inherit;cursor:pointer;transition:.25s;display:block}
+.scn.on{border-color:var(--g);background:rgba(184,217,193,.08)}.scn span{font-size:12.5px;font-weight:700;letter-spacing:.06em}.scn b{display:block;font-size:40px;margin:4px 0}.scn small{color:var(--tx2);font-size:13px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.steps{list-style:none;padding:0;margin:6px 0 14px}.steps li{font-size:13px;color:var(--tx2);padding:4px 0;opacity:.45;transition:.3s}.steps li.on{opacity:1;color:var(--tx)}.steps li.on::before{content:"✓ ";color:var(--g)}
+input[type=range]{width:100%;accent-color:var(--g);margin:8px 0}.yr{display:flex;justify-content:space-between;font-size:13px;font-weight:700}
+.iv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;padding:14px 0;border-top:1px solid var(--ln);cursor:pointer;align-items:center}
+.iv input{width:18px;height:18px;accent-color:var(--t);grid-row:span 2}.iv b{font-size:14px}.iv small{color:var(--tx2);font-size:12.5px}.fx{grid-column:2;display:flex;flex-wrap:wrap;gap:6px}.fx span{font-size:11.5px;border:1px solid var(--ln);border-radius:6px;padding:2px 7px;color:var(--tx2);transition:.3s}.fx.on span{border-color:var(--t);color:var(--g)}
+.fc{margin:12px 0}.fc div{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}.br{height:6px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden}.br i{display:block;height:100%;width:0;background:var(--warn);border-radius:4px;transition:width 1s}
+.imp{margin-top:14px;padding:14px;border:1px solid var(--ln);border-radius:10px;display:flex;justify-content:space-between;align-items:center}.imp b{font-size:26px}
+#info{position:fixed;right:18px;top:76px;width:320px;z-index:7;background:rgba(7,20,18,.92);border:1px solid var(--ln);border-radius:14px;padding:20px;transform:translateX(120%);transition:transform .45s cubic-bezier(.2,.7,.2,1);max-height:80vh;overflow:auto}#info.open{transform:none}
+#info .x{position:absolute;right:12px;top:10px;background:none;border:0;color:var(--tx2);font-size:20px;cursor:pointer}#info .big{font-size:46px;font-weight:800;line-height:1.1}#info .big small{font-size:15px;color:var(--tx2);font-weight:600}
+.row{display:flex;justify-content:space-between;font-size:14px;padding:8px 0;border-top:1px solid var(--ln)}
+#tip{position:fixed;z-index:8;pointer-events:none;background:#0d2420;border:1px solid var(--g);border-radius:6px;padding:4px 9px;font-size:12px;font-weight:600;opacity:0;transition:opacity .15s}
+#scan{position:fixed;top:64px;left:50%;transform:translateX(-50%);z-index:6;font-size:12px;font-weight:700;letter-spacing:.12em;color:var(--g);opacity:0;transition:opacity .5s;pointer-events:none;white-space:nowrap}
+#hud{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:6;font-size:12px;font-weight:700;color:var(--tx2);background:var(--pn);border:1px solid var(--ln);border-radius:99px;padding:8px 16px;white-space:nowrap}#hud b{color:var(--g)}
+#cap{position:fixed;left:18px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:5;font-size:10.5px;color:var(--tx2);max-width:230px;line-height:1.4}
+#zm{position:fixed;right:18px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:6;display:flex;gap:6px}#zm button{width:34px;height:34px;border-radius:8px;border:1px solid var(--ln);background:var(--pn);color:var(--tx);font-size:18px;cursor:pointer}
+#seq{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:9;background:rgba(7,20,18,.94);border:1px solid var(--ln);border-radius:12px;padding:16px 20px;width:min(320px,92vw);display:none}#seq.on{display:block}#seq li{list-style:none;font-size:12.5px;font-weight:600;color:var(--tx2);padding:3px 0;opacity:.4}#seq li.on{opacity:1;color:var(--tx)}#seq li.on::before{content:"● ";color:var(--g)}#seq ul{padding:0;margin-bottom:10px}
+#seq button{background:none;border:0;color:var(--tx2);font:600 12px Manrope;cursor:pointer;text-decoration:underline}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--g);outline-offset:2px}
+@media(max-width:760px){nav,.dm{display:none}#cap{display:none}.g6{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.box{padding:20px;background:rgba(7,20,18,.86)}
+#info{right:0;left:0;top:auto;bottom:0;width:auto;border-radius:14px 14px 0 0;transform:translateY(120%);max-height:50vh;padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))}#info.open{transform:none}#hud{bottom:calc(58px + env(safe-area-inset-bottom,0px));font-size:11px}#zm{display:none}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}.box{opacity:1;transform:none}}
+
+/* icons (additive) */
+.gz{position:relative}.gz svg.gi{position:absolute;top:9px;left:9px;width:20px;height:20px;pointer-events:none;opacity:.85;filter:drop-shadow(0 1px 1px rgba(0,0,0,.45)) drop-shadow(0 0 4px rgba(143,207,163,.35));transition:opacity .2s,transform .2s,filter .2s;animation:icf 5s ease-in-out infinite}.gz:hover svg.gi{opacity:1;transform:scale(1.1);filter:drop-shadow(0 1px 1px rgba(0,0,0,.45)) drop-shadow(0 0 6px rgba(143,207,163,.6))}
+.ni{pointer-events:none;opacity:.88;transition:opacity .25s,filter .25s;filter:drop-shadow(0 1px 1px rgba(0,0,0,.5)) drop-shadow(0 0 3px rgba(143,207,163,.35))}.ni .nf{animation:icf 5s ease-in-out infinite;transition:transform .25s;transform-box:fill-box;transform-origin:center}.nd:hover .ni,.nd.hl .ni{opacity:1;filter:drop-shadow(0 1px 1px rgba(0,0,0,.5)) drop-shadow(0 0 6px rgba(143,207,163,.7))}.nd:hover .ni .nf,.nd.hl .ni .nf{transform:scale(1.12)}
+@keyframes icf{0%,100%{translate:0 0}50%{translate:0 -1.5px}}
+/* land fertility (additive) */
+.sleg{margin:14px 0 4px}.sleg i{display:block;height:8px;border-radius:5px;background:linear-gradient(90deg,#C96B62,#D69A55,#7fc08a)}.sleg div{display:flex;justify-content:space-between;font-size:11px;color:var(--tx2);font-weight:600;margin-top:5px}
+#snu .fc{margin:9px 0}#snu .fc div{font-size:13.5px}.sty{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;margin:14px 0 4px;padding-top:12px;border-top:1px solid var(--ln)}.sty small{display:block;font-size:11.5px;color:var(--tx2);font-weight:600;margin-bottom:2px}.sty b{font-size:13.5px;line-height:1.35;display:block}
+@media(max-width:760px){.sty{grid-template-columns:1fr}}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<linearGradient id="icg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e4f7e8"/><stop offset=".55" stop-color="#8fcfa3"/><stop offset="1" stop-color="#3c8a63"/></linearGradient>
+<linearGradient id="icw" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e2f4fb"/><stop offset=".55" stop-color="#8ccbe0"/><stop offset="1" stop-color="#3d82a3"/></linearGradient>
+<symbol id="ic-sun" viewBox="0 0 24 24"><g stroke="#cfeed8" stroke-width="1.6" stroke-linecap="round" opacity=".85"><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5.3 5.3l1.7 1.7M17 17l1.7 1.7M18.7 5.3L17 7M7 17l-1.7 1.7"/></g><circle cx="12" cy="12" r="4.8" fill="url(#icg)" stroke="#e4f7e8" stroke-opacity=".6" stroke-width=".6"/><ellipse cx="10.4" cy="10.3" rx="1.6" ry="1.1" fill="#fff" opacity=".55"/></symbol>
+<symbol id="ic-drop" viewBox="0 0 24 24"><path d="M12 2.8C12 2.8 5.6 10 5.6 14.6a6.4 6.4 0 0 0 12.8 0C18.4 10 12 2.8 12 2.8z" fill="url(#icw)" stroke="#e2f4fb" stroke-opacity=".6" stroke-width=".6"/><ellipse cx="9.6" cy="14" rx="1.3" ry="2.4" fill="#fff" opacity=".5" transform="rotate(18 9.6 14)"/></symbol>
+<symbol id="ic-leaf" viewBox="0 0 24 24"><path d="M4.5 19.5C4.5 10 10.5 4 20 4c0 9.5-5.5 15.5-15.5 15.5z" fill="url(#icg)" stroke="#e4f7e8" stroke-opacity=".6" stroke-width=".6"/><path d="M5 19c3-4.5 6.5-8 11-11" stroke="#1d5a3f" stroke-width="1.1" stroke-linecap="round" fill="none" opacity=".7"/><path d="M8 9c2-2 5-3.4 8-3.8" stroke="#fff" stroke-opacity=".4" stroke-width="1" stroke-linecap="round" fill="none"/></symbol>
+<symbol id="ic-bird" viewBox="0 0 24 24"><path d="M2.8 12.5C5.8 8.6 10 8.4 13 10.6L18.6 7.4 17 12c1 3.2-1.6 6.4-5.8 6.4-4 0-6.7-2.4-8.4-5.9z" fill="url(#icg)" stroke="#e4f7e8" stroke-opacity=".6" stroke-width=".6"/><path d="M18.6 7.4l3 1.2-3.2 1.3z" fill="#e4f7e8"/><path d="M7 13.2c2.4 2.4 5.6 2.6 8 .6" stroke="#1d5a3f" stroke-width="1" stroke-linecap="round" fill="none" opacity=".6"/><circle cx="15.4" cy="9.4" r=".8" fill="#0d2420"/></symbol>
+<symbol id="ic-wave" viewBox="0 0 24 24"><path d="M2.5 9c2.2-2.4 4.4-2.4 6.5 0s4.3 2.4 6.5 0 4.3-2.4 6 0V20h-19z" fill="url(#icw)" stroke="#e2f4fb" stroke-opacity=".6" stroke-width=".6"/><path d="M2.5 15c2.2-2.2 4.4-2.2 6.5 0s4.3 2.2 6.5 0 4.3-2.2 6 0" stroke="#fff" stroke-opacity=".5" stroke-width="1.2" stroke-linecap="round" fill="none"/></symbol>
+<symbol id="ic-city" viewBox="0 0 24 24"><rect x="3" y="10" width="6" height="11" rx="1" fill="url(#icg)"/><rect x="9.5" y="3" width="7" height="18" rx="1" fill="url(#icg)" stroke="#e4f7e8" stroke-opacity=".5" stroke-width=".6"/><rect x="17" y="8" width="4.5" height="13" rx="1" fill="url(#icg)"/><g fill="#0d2420" opacity=".55"><rect x="11.4" y="6" width="1.4" height="1.6"/><rect x="13.8" y="6" width="1.4" height="1.6"/><rect x="11.4" y="10" width="1.4" height="1.6"/><rect x="13.8" y="10" width="1.4" height="1.6"/><rect x="11.4" y="14" width="1.4" height="1.6"/><rect x="13.8" y="14" width="1.4" height="1.6"/></g></symbol>
+<symbol id="ic-rain" viewBox="0 0 24 24"><path d="M7 14.5a4.2 4.2 0 0 1-.3-8.4 5.4 5.4 0 0 1 10.3 1.2A3.6 3.6 0 0 1 17.4 14.5z" fill="url(#icw)" stroke="#e2f4fb" stroke-opacity=".6" stroke-width=".6"/><path d="M8.5 17.5l-1 2.8M12.5 17.5l-1 2.8M16.5 17.5l-1 2.8" stroke="#8ccbe0" stroke-width="1.5" stroke-linecap="round"/></symbol>
+<symbol id="ic-run" viewBox="0 0 24 24"><path d="M3 5.5l18 6.5v3.6L3 9.2z" fill="url(#icw)" stroke="#e2f4fb" stroke-opacity=".6" stroke-width=".6"/><path d="M3 14l18 6.5" stroke="#8ccbe0" stroke-width="1.6" stroke-linecap="round" fill="none"/><path d="M5 8.6l8 2.9" stroke="#fff" stroke-opacity=".5" stroke-width="1" stroke-linecap="round"/><path d="M3 18.5l9 3" stroke="#8ccbe0" stroke-width="1.2" stroke-linecap="round" opacity=".6"/></symbol>
+<symbol id="ic-land" viewBox="0 0 24 24"><path d="M1.5 20.5L9 7.5l5 8 2.6-3.8 6 8.8z" fill="url(#icg)" stroke="#e4f7e8" stroke-opacity=".5" stroke-width=".6"/><path d="M9 7.5l2.4 4-2.4-1.2-2.6 1.4z" fill="#fff" opacity=".4"/><circle cx="18.5" cy="6" r="2.4" fill="#e4f7e8" opacity=".85"/></symbol>
+<symbol id="ic-level" viewBox="0 0 24 24"><rect x="4" y="3" width="7" height="18" rx="1.5" fill="none" stroke="#e2f4fb" stroke-opacity=".7" stroke-width="1.2"/><path d="M4 13h7v6.5a1.5 1.5 0 0 1-1.5 1.5h-4A1.5 1.5 0 0 1 4 19.5z" fill="url(#icw)"/><path d="M4 7h3M4 10h3" stroke="#e2f4fb" stroke-opacity=".6" stroke-width="1" stroke-linecap="round"/><path d="M12.5 14c1.6-1.6 3.2-1.6 4.8 0s3.2 1.6 4.8 0v6.5h-9.6z" fill="url(#icw)" stroke="#e2f4fb" stroke-opacity=".6" stroke-width=".6"/></symbol>
+</defs></svg>
+
+<header><b>ECOLEAP AI</b><nav><a href="#twin">Digital twin</a><a href="#health">Health</a><a href="#systems">Connected systems</a><a href="#sim">2030 simulator</a><a href="#bio">Biodiversity</a><a href="#soil">Land fertility</a><a href="#why">Reasoning</a></nav><span class="dm">Demo data · modelled</span></header>
+<canvas id="c"></canvas><div id="scan"></div><div id="tip"></div>
+<aside id="info" aria-live="polite"></aside>
+<div id="hud"></div><div id="cap">NASHIK-INSPIRED CONCEPTUAL DIGITAL TWIN · MODELLED DEMO DATA</div>
+<div id="zm"><button id="zi" aria-label="Zoom in">+</button><button id="zo" aria-label="Zoom out">−</button></div>
+<div id="seq"><ul id="sl"></ul><button id="skip">Skip analysis</button></div>
+<main>
+<section class="sec" id="hero"><div class="box bare in"><h1>A landscape. A living system.</h1><p class="sub">Understand today. Explore what comes next.</p>
+<button class="btn" id="b-an">ANALYZE SITE</button><button class="btn o" id="b-run">RUN 2030 SIMULATION</button>
+<div class="live"><span><i>●</i> LIVE ENVIRONMENTAL MODEL</span><span>NASHIK-INSPIRED DIGITAL TWIN</span><span>2026 → 2030</span></div></div></section>
+
+<section class="sec r" id="twin"><div class="box"><div class="lbl">DIGITAL TWIN</div><h2>Touch the landscape</h2><p>Hover any region of the terrain, then click it. Pulsing markers show where water, vegetation, heat, flood and habitat conditions are modelled. Drag to orbit.</p>
+<div class="chips" id="chips"></div><span class="tag">MODELLED DEMO DATA · ILLUSTRATIVE TERRAIN</span></div></section>
+
+<section class="sec" id="health"><div class="box"><div class="lbl">ENVIRONMENTAL HEALTH</div>
+<div class="ov"><b id="ovn">—</b><span id="ovs">Run analysis to score the site</span></div>
+<div class="g6" id="g6"></div><button class="btn o" id="b-an2">ANALYZE SITE</button><span class="tag">SCENARIO-BASED · DEMO DATA · scores follow the year and scenario chosen below</span></div></section>
+
+<section class="sec c" id="systems"><div class="box wide"><div class="lbl">CONNECTED SYSTEMS</div><h2>Nothing happens in isolation.</h2>
+<p style="margin-bottom:14px">Hover a node to see what it connects to. Click for the explanation.</p><div id="netw"></div>
+<div id="nd" style="min-height:70px;margin-top:12px;font-size:15px;color:var(--tx2)">Select a node to read how the cause-and-effect chain works.</div><span class="tag">ILLUSTRATIVE CAUSAL MODEL</span></div></section>
+
+<section class="sec r" id="sim"><div class="box"><div class="lbl">2030 FUTURE SIMULATOR</div><h2>One place. Two possible futures.</h2>
+<div class="two"><button class="scn" data-s="do"><span>DO NOTHING</span><b id="r-do">—</b><small>Continued environmental pressure</small></button><button class="scn on" data-s="iv"><span>INTERVENE</span><b id="r-iv">—</b><small>A more resilient landscape</small></button></div>
+<button class="btn" id="run">RUN 2030 SIMULATION</button>
+<ul class="steps" id="steps"></ul>
+<div class="yr"><span>2026</span><span id="yr">2026</span><span>2030</span></div><input type="range" id="sl-t" min="0" max="100" value="0" aria-label="Year from 2026 to 2030">
+<span class="tag">ILLUSTRATIVE · SCENARIO-BASED · the 3D landscape follows the slider</span></div></section>
+
+<section class="sec" id="ivs"><div class="box"><div class="lbl">INTERVENTIONS</div><h2>Choose what changes</h2><p>Each action shifts the modelled indicators and the landscape. Switching one on selects the Intervene future.</p><div id="ivl"></div>
+<div class="imp"><span style="font-size:13px;color:var(--tx2)">Overall health at the selected year</span><b id="ovl">63</b></div><span class="tag">ILLUSTRATIVE MODELLED VALUES</span></div></section>
+
+<section class="sec r" id="bio"><div class="box"><div class="lbl">BIODIVERSITY · LIVING SENSORS</div><h2>The landscape has living sensors.</h2><p>Citizen observations will appear as points in the world. Click a point to open it. The number of points changes with the future you choose.</p>
+<div class="chips" id="obsc"></div><span class="tag">DEMO POINTS · NOT REAL SPECIES RECORDS</span></div></section>
+
+<section class="sec" id="soil"><div class="box"><div class="lbl">LAND FERTILITY · SOIL NUTRITION</div><h2>How nourished is the land?</h2><p>Pick an area to read its soil fertility and nutrient levels, then switch on the map view to see fertility painted across the Nashik terrain. Tap or click the terrain to read any point.</p>
+<div class="chips" id="sac"></div>
+<div class="ov" style="margin-top:18px"><b id="sfn">—</b><span id="sfs"></span></div>
+<div style="font-size:13px;color:var(--tx2);margin:6px 0 10px;font-weight:600">Nutrition level: <b id="snl">—</b></div>
+<div id="snu"></div>
+<div class="sty"><div><small>Soil type</small><b id="sty">—</b></div><div><small>Suited crops</small><b id="scr">—</b></div></div>
+<p id="sxt" style="margin-top:12px;font-size:14px"></p>
+<div class="sleg"><i></i><div><span>Low fertility</span><span>High fertility</span></div></div>
+<button class="btn" id="b-sf" style="margin-top:12px">SHOW FERTILITY ON MAP</button>
+<span class="tag">MODELLED DEMO DATA · NOT A LAB SOIL TEST · values follow the year and scenario in the simulator</span></div></section>
+
+<section class="sec" id="why"><div class="box"><div class="lbl">AI REASONING · MODELLED EXPLANATION</div><h2 id="wq">Why this future?</h2><div id="wf"></div>
+<div class="imp"><span style="font-size:13px;color:var(--tx2)">BIODIVERSITY IMPACT</span><b id="wi">—</b></div>
+<div class="lbl" style="margin-top:18px">AI INTERPRETATION</div><p id="wt"></p><span class="tag">MODELLED EXPLANATION · NOT A VALIDATED PREDICTION</span></div></section>
+
+<section class="sec c" id="cta"><div class="box bare"><h1 style="font-size:clamp(34px,5vw,60px)">The future is not fixed.</h1><p class="sub">Explore what changes when we act.</p><button class="btn" id="b-again">RUN ANOTHER SIMULATION</button></div></section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const $=id=>document.getElementById(id),cl=x=>Math.min(1,Math.max(0,x)),sm=(a,b,x)=>{x=cl((x-a)/(b-a));return x*x*(3-2*x)};
+const mob=innerWidth<760,rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const CO={g:'#B8D9C1',t:'#72A89A',w:'#5FA8B8',warn:'#D69A55',crit:'#C96B62'};
+/* ===== simulation state (separate from visuals) ===== */
+const IND=['Climate','Water','Vegetation','Biodiversity','Flood risk','Urban pressure'],BASE_I=[58,72,68,54,42,61],DO_D=[-10,-14,-14,-14,-10,-12];
+const IV={veg:{n:'Restore vegetation',x:'Replant degraded slopes and field edges.',d:[3,2,12,6,0,2],fx:[['Vegetation',12],['Urban heat',-4],['Biodiversity',6]]},
+ rain:{n:'Rainwater harvesting',x:'Capture runoff in ponds and recharge pits.',d:[0,10,2,1,6,0],fx:[['Water resilience',10],['Flood risk',-6],['Vegetation',2]]},
+ cor:{n:'Green corridors',x:'Link forest patches with the river habitat.',d:[4,5,3,12,0,3],fx:[['Biodiversity',12],['Urban heat',-7],['Water resilience',5]]},
+ imp:{n:'Reduce impervious surfaces',x:'Replace paving with permeable ground.',d:[4,4,0,0,9,5],fx:[['Flood risk',-9],['Urban heat',-5],['Water resilience',4]]},
+ pol:{n:'Pollution reduction',x:'Cut industrial and traffic emissions.',d:[6,1,3,4,0,4],fx:[['Air and climate',6],['Vegetation',3],['Biodiversity',4]]}};
+const ST={t:0,scen:'iv',iv:{veg:1,rain:1,cor:1,imp:1,pol:1},analyzed:false,zone:null,running:false,soil:0,sa:'all',soilPt:null};
+const sF=()=>Object.values(ST.iv).filter(Boolean).length/5,sE=()=>ST.scen==='iv'?sF():0;
+function indVals(sc,t){const g=[0,0,0,0,0,0];if(sc==='iv')for(const k in ST.iv)if(ST.iv[k])IV[k].d.forEach((v,i)=>g[i]+=v);return BASE_I.map((b,i)=>Math.round(b+t*(DO_D[i]+g[i])))}
+const overall=(sc,t)=>Math.round(63+t*(-15+27*(sc==='iv'?sF():0))),ostat=v=>v>=75?['Resilient',CO.g]:v>=60?['Needs attention',CO.warn]:['Under pressure',CO.crit];
+const stat=v=>v>=70?['Stable',CO.g]:v>=55?['Watch',CO.warn]:['Needs attention',CO.crit];
+const lab=(n,v)=>/pressure|exposure/i.test(n)?(v>=70?'Low':v>=50?'Moderate':'High'):(v>=70?'Healthy':v>=55?'Moderate':'Stressed');
+const ZN={water:{t:'WATER HEALTH',i:1,a:'Surface water',j:4,b:'Runoff pressure'},vegetation:{t:'VEGETATION HEALTH',i:2,a:'Canopy condition',j:0,b:'Heat exposure'},urban:{t:'URBAN PRESSURE',i:5,a:'Built-up pressure',j:0,b:'Heat exposure'},
+ heat:{t:'URBAN HEAT',i:0,a:'Heat exposure',j:5,b:'Built-up pressure'},agriculture:{t:'AGRICULTURE HEALTH',i:1,a:'Irrigation water',j:2,b:'Crop cover'},flood:{t:'FLOOD RESILIENCE',i:4,a:'Flood resilience',j:5,b:'Paved runoff pressure'},biodiversity:{t:'BIODIVERSITY ZONE',i:3,a:'Habitat quality',j:2,b:'Connectivity'}};
+/* ===== environment fields (procedural, illustrative) ===== */
+const nz=(x,z)=>.5+.5*(Math.sin(x*.21+1.3)*Math.cos(z*.17)*.6+Math.sin(x*.43+z*.31)*.4);
+const rx=z=>Math.sin(z*.085+.6)*7-3,URB={x:-18,z:14};
+const hgt=(x,z)=>{let h=3*Math.sin(x*.07+.5)*Math.cos(z*.06)+1.6*Math.sin(x*.15+z*.11)+9*Math.exp(-((x-24)**2+(z+20)**2)/280)+5*Math.exp(-((x+26)**2+(z+22)**2)/220)+x*.02;
+ h+=.8*(nz(x*2.3+3,z*2.1)-.5)+sm(1,8,h)*1.1*(1-Math.abs(Math.sin(x*.23+z*.17+Math.sin(z*.09)*1.8)));h-=3.2*Math.exp(-((Math.abs(x-rx(z))/3.4)**2));return h*(1-.5*Math.exp(-((Math.hypot(x-URB.x,z-URB.z)/13)**2)))};
+const fld=(x,z)=>x>4&&x<34&&z>-2&&z<28;
+function env(x,z){const h=hgt(x,z),d=Math.abs(x-rx(z)),u=cl(1-Math.hypot(x-URB.x,z-URB.z)/17),fm=fld(x,z)?1:0,forest=sm(2.5,7,h)*(1-fm),n=nz(x,z),veg=cl(.72-.75*u-.28*fm+.3*(n-.5)+.25*forest),low=1-sm(-2.5,1.8,h);
+ return{h,d,u,fm,forest,veg,flood:cl(.55*low+.5*Math.exp(-d/6)+.15*u-.05),bio:cl(.18+.55*Math.exp(-d/8)+.5*forest*veg-.45*u)}}
+function zoneOf(e){if(e.d<3.4)return'water';if(e.u>.34)return'urban';if(e.fm)return'agriculture';if(e.flood>.5)return'flood';if(e.forest>.3||e.veg>.62)return'vegetation';if(e.bio>.4)return'biodiversity';return null}
+/* ===== UI helpers ===== */
+const GL={};let scanTO;
+function setScan(t){const s=$('scan');s.textContent=t;s.style.opacity=1;clearTimeout(scanTO);scanTO=setTimeout(()=>s.style.opacity=0,t==='ANALYSIS COMPLETE'?2200:6000)}
+function runScan(){setScan('ENVIRONMENTAL SCAN');GL.scan&&GL.scan(2800);setTimeout(()=>setScan('ANALYZING LANDSCAPE...'),1100);setTimeout(()=>setScan('ANALYSIS COMPLETE'),2800)}
+function countTo(el,v,ms=1100){if(rm){el.textContent=v;return}const t0=performance.now();(function f(n){const p=Math.min(1,(n-t0)/ms);el.textContent=Math.round(v*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)})(t0)}
+function openInfo(h){$('info').innerHTML='<button class="x" aria-label="Close">×</button>'+h;$('info').classList.add('open');$('info').querySelector('.x').onclick=closeInfo}
+function closeInfo(){$('info').classList.remove('open');ST.zone=null;ST.soilPt=null;GL.sel&&GL.sel(null)}
+function showZone(k){ST.zone=k;ST.soilPt=null;GL.sel&&GL.sel(k);const z=ZN[k],v=indVals(ST.scen,ST.t),s=v[z.i],[st,c]=stat(s);
+ openInfo(`<div class="lbl">${z.t}</div><div class="big">${s}<small> / 100</small></div><div style="color:${c};font-weight:700;margin:2px 0 12px">${st}</div><div class="row"><span>${z.a}</span><b>${lab(z.a,s)}</b></div><div class="row"><span>${z.b}</span><b>${lab(z.b,v[z.j])}</b></div><div class="row"><span>Year · scenario</span><b>${Math.round(2026+ST.t*4)} · ${ST.scen==='iv'?'Intervene':'Do nothing'}</b></div><span class="tag">MODELLED DEMO DATA</span>`)}
+function showObs(o){ST.soilPt=null;openInfo(`<div class="lbl">OBSERVATION</div><div class="row"><span>Species</span><b>Example ${o.type}</b></div><div class="row"><span>Observation type</span><b>Citizen observation</b></div><div class="row"><span>Location</span><b>Conceptual zone</b></div><div class="row"><span>Confidence</span><b>Demo</b></div><span class="tag">DEMO POINT · NOT A REAL SPECIES RECORD</span>`)}
+/* gauges */
+const GI=['ic-sun','ic-drop','ic-leaf','ic-bird','ic-wave','ic-city'];
+$('g6').innerHTML=IND.map((n,i)=>`<div class="gz"><svg class="gi" aria-hidden="true"><use href="#${GI[i]}"/></svg><svg viewBox="0 0 84 84"><circle class="bgc" cx="42" cy="42" r="34"/><circle class="fg" id="gf${i}" cx="42" cy="42" r="34" stroke="${CO.g}" stroke-dasharray="213.6" stroke-dashoffset="213.6"/><text x="42" y="50" id="gn${i}">—</text></svg><small>${n}</small><em id="gt${i}" style="color:var(--tx2)">Not analyzed</em></div>`).join('');
+function refresh(anim){const v=indVals(ST.scen,ST.t);
+ IND.forEach((n,i)=>{const f=$('gf'+i),c=stat(v[i])[1];if(ST.analyzed){f.style.strokeDashoffset=213.6*(1-v[i]/100);f.style.stroke=c;anim?countTo($('gn'+i),v[i]):$('gn'+i).textContent=v[i];const d=v[i]-BASE_I[i];$('gt'+i).innerHTML=`<span style="color:${c}">${stat(v[i])[0]}</span> · ${d>0?'▲ +':d<0?'▼ ':'● '}${d}`}});
+ const o=overall(ST.scen,ST.t),[os,oc]=ostat(o);if(ST.analyzed){anim?countTo($('ovn'),o):$('ovn').textContent=o;$('ovs').innerHTML=`/ 100 · <span style="color:${oc}">${os}</span>`}
+ $('ovl').textContent=o;$('yr').textContent=Math.round(2026+ST.t*4);
+ $('hud').innerHTML=`2026 → 2030 · <b>${Math.round(2026+ST.t*4)}</b> · ${ST.scen==='iv'?'INTERVENE':'DO NOTHING'}${ST.soil?' · <b>SOIL FERTILITY</b>':''}`;
+ document.querySelectorAll('.scn').forEach(b=>b.classList.toggle('on',b.dataset.s===ST.scen));
+ document.querySelectorAll('.fx').forEach(f=>f.classList.toggle('on',ST.scen==='iv'&&ST.iv[f.dataset.k]));
+ reason();soilUI();if(ST.zone&&$('info').classList.contains('open'))showZone(ST.zone);else if(ST.soilPt&&$('info').classList.contains('open'))showSoil(ST.soilPt.x,ST.soilPt.z);GL.vis&&GL.vis()}
+/* interventions */
+$('ivl').innerHTML=Object.keys(IV).map(k=>`<label class="iv"><input type="checkbox" data-k="${k}" checked><b>${IV[k].n}</b><small>${IV[k].x}</small><span class="fx" data-k="${k}">${IV[k].fx.map(f=>`<span>${f[0]} ${f[1]>0?'+':''}${f[1]}</span>`).join('')}</span></label>`).join('');
+document.querySelectorAll('.iv input').forEach(i=>i.onchange=()=>{ST.iv[i.dataset.k]=i.checked?1:0;ST.scen='iv';refresh()});
+/* reasoning */
+function reason(){const t=ST.t,up=ST.scen==='iv'&&sF()>=.4,k=up?sF():1;
+ const L=up?[['Vegetation recovery',22],['Green connectivity',26],['Urban heat',-9],['Habitat fragmentation',-15]]:[['Temperature',24],['Vegetation stress',31],['Habitat fragmentation',18],['Urban pressure',14]];
+ $('wq').textContent=up?'Why did biodiversity increase?':'Why did biodiversity decrease?';
+ $('wf').innerHTML=L.map(a=>{const v=Math.round(a[1]*t*(up?k:1));return`<div class="fc"><div><span>${a[0]}</span><b>${v>0?'+':''}${v}%</b></div><div class="br"><i style="width:${Math.min(100,Math.abs(a[1])*t*2.4)}%;background:${(up?a[1]>0:a[1]<0)?CO.t:CO.warn}"></i></div></div>`}).join('');
+ $('wi').innerHTML=`<span style="color:${up?CO.g:CO.crit}">${up?'+':'−'}${Math.round((up?14:17)*t*(up?k:1))}%</span>`;
+ $('wt').textContent=up?'Restored vegetation and connected corridors give habitats room to recover, while lower heat and less paved surface ease stress on local species.':'Reduced vegetation connectivity combined with increased heat and urban pressure creates higher habitat stress.'}
+/* scenario + slider + run */
+document.querySelectorAll('.scn').forEach(b=>b.onclick=()=>{ST.scen=b.dataset.s;refresh()});
+$('sl-t').oninput=e=>{ST.t=e.target.value/100;refresh()};
+const STEPS=['Initialize model','Apply climate pressure','Model vegetation response','Calculate water response','Calculate biodiversity response','Generate future pathways'];
+$('steps').innerHTML=STEPS.map(s=>`<li>${s}</li>`).join('');
+function runSim(){if(ST.running)return;ST.running=true;$('run').disabled=true;$('r-do').textContent=$('r-iv').textContent='…';ST.t=0;$('sl-t').value=0;refresh();
+ const lis=[...document.querySelectorAll('#steps li')];lis.forEach(l=>l.classList.remove('on'));const T0=performance.now(),D=rm?600:3600;
+ (function f(n){const p=Math.min(1,(n-T0)/D);ST.t=p;$('sl-t').value=p*100;lis.forEach((l,i)=>{if(p>=i/STEPS.length)l.classList.add('on')});refresh();
+  if(p<1)requestAnimationFrame(f);else{ST.running=false;$('run').disabled=false;$('r-do').textContent=overall('do',1);$('r-iv').textContent=overall('iv',1)}})(T0)}
+$('run').onclick=runSim;
+const go=id=>document.getElementById(id).scrollIntoView({behavior:rm?'auto':'smooth'});
+$('b-run').onclick=()=>{go('sim');setTimeout(runSim,rm?0:700)};$('b-again').onclick=$('b-run').onclick;
+/* analyze sequence */
+const AN=['Environmental scan','Climate analysis','Water analysis','Vegetation analysis','Biodiversity analysis','Flood risk analysis','Urban pressure analysis'];let anT;
+$('sl').innerHTML=AN.map(s=>`<li>${s}</li>`).join('');
+function finishAn(){clearTimeout(anT);$('seq').classList.remove('on');if(!ST.analyzed){ST.analyzed=true;refresh(true);setScan('ANALYSIS COMPLETE');go('health')}}
+function analyze(){if($('seq').classList.contains('on'))return;$('seq').classList.add('on');const li=[...document.querySelectorAll('#sl li')];li.forEach(l=>l.classList.remove('on'));GL.scan&&GL.scan(2800);setScan('ENVIRONMENTAL SCAN');
+ let i=0;(function nx(){if(i<li.length){li[i++].classList.add('on');anT=setTimeout(nx,rm?100:400)}else finishAn()})()}
+$('b-an').onclick=$('b-an2').onclick=analyze;$('skip').onclick=finishAn;
+/* chips */
+$('chips').innerHTML=Object.keys(ZN).filter(k=>k!=='heat').map(k=>`<button class="chip" data-z="${k}">${k.toUpperCase()}</button>`).join('');
+document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{showZone(c.dataset.z);GL.fly&&GL.fly(c.dataset.z)});
+/* connected systems */
+const NODES={heat:['RISING HEAT',90,70,'Higher air and surface temperatures dry soils and raise water demand.'],vs:['VEGETATION STRESS',270,70,'Heat and low soil moisture reduce plant vigour and canopy cover.'],hab:['HABITAT DEGRADATION',450,70,'Thinner, patchier vegetation breaks up the habitat animals rely on.'],bio:['BIODIVERSITY IMPACT',630,70,'Fewer connected habitats mean fewer species and less pollination.'],res:['REDUCED RESILIENCE',810,70,'With less cover to cool and hold water, the landscape recovers slowly from shocks.'],
+ rain:['HEAVY RAINFALL',180,250,'Intense rain arrives faster than soils and drains can absorb it.'],run:['SURFACE RUNOFF',360,250,'Hard surfaces and thin vegetation send water downhill quickly, carrying soil and pollutants.'],wq:['WATER QUALITY IMPACT',540,250,'Runoff delivers sediment and contaminants into the river corridor.'],fl:['FLOOD RISK',720,250,'Fast runoff into low-lying ground raises the chance and depth of flooding.']};
+const NI={heat:'ic-sun',vs:'ic-leaf',hab:'ic-land',bio:'ic-bird',rain:'ic-rain',run:'ic-run',wq:'ic-drop',fl:'ic-level'};
+const LK=[['heat','vs'],['vs','hab'],['hab','bio'],['bio','res'],['rain','run'],['run','wq'],['wq','fl'],['vs','run',1],['fl','res',1]];
+(function(){let s='<svg id="net" class="net" viewBox="0 0 900 320">';
+ const pth=l=>{const a=NODES[l[0]],b=NODES[l[1]];return l[2]?`M${a[1]},${a[2]+(a[2]<b[2]?22:-22)} L${b[1]},${b[2]+(a[2]<b[2]?-22:22)}`:`M${a[1]+75},${a[2]} L${b[1]-75},${b[2]}`};
+ LK.forEach((l,i)=>s+=`<path class="lk ${l[2]?'d':''}" data-i="${i}" d="${pth(l)}"/>`);
+ if(!rm)LK.forEach((l,i)=>[0,1.2].forEach(b=>s+=`<circle class="pt" r="3"><animateMotion dur="2.4s" begin="${b}s" repeatCount="indefinite" path="${pth(l)}"/></circle>`));
+ for(const k in NODES){const n=NODES[k];s+=`<g class="nd" data-k="${k}" tabindex="0" role="button"><rect x="${n[1]-75}" y="${n[2]-22}" width="150" height="44" rx="9"/><text x="${n[1]}" y="${n[2]+4}">${n[0]}</text>${NI[k]?`<g class="ni" transform="translate(${n[1]-75-4},${n[2]-22-7})"><circle cx="9" cy="9" r="10" fill="#0d2420" stroke="rgba(184,217,193,.35)"/><svg class="nf" x="2.5" y="2.5" width="13" height="13"><use href="#${NI[k]}"/></svg></g>`:''}</g>`}
+ $('netw').innerHTML=s+'</svg>';const net=$('net');
+ const hl=k=>{const set=new Set([k]);LK.forEach((l,i)=>{if(l[0]===k||l[1]===k){set.add(l[0]);set.add(l[1]);net.querySelector(`.lk[data-i="${i}"]`).classList.add('hl')}});net.classList.add('f');net.querySelectorAll('.nd').forEach(n=>n.classList.toggle('hl',set.has(n.dataset.k)))};
+ const un=()=>{net.classList.remove('f');net.querySelectorAll('.hl').forEach(e=>e.classList.remove('hl'))};
+ net.querySelectorAll('.nd').forEach(n=>{const k=n.dataset.k;n.onmouseenter=n.onfocus=()=>hl(k);n.onmouseleave=n.onblur=un;n.onclick=()=>{$('nd').innerHTML=`<b style="color:var(--tx)">${NODES[k][0]}</b> — ${NODES[k][3]}`}})})();
+/* observation chips (filled by GL) */
+/* ===== land fertility model (procedural, illustrative, Nashik terrain) ===== */
+const soilShift=()=>ST.t*(-.09+(ST.scen==='iv'?.17*sF():0));
+function soilAt(x,z,e){e=e||env(x,z);const n=nz(x*1.3+5,z*1.1),f=cl(.42+.34*Math.exp(-Math.max(0,e.d-3.4)/9)+.14*e.fm+.12*e.veg+.08*e.forest-.5*e.u-.16*sm(4,9,e.h)+.18*(n-.5));
+ return{f,N:cl(f*.95-.08*e.fm+.06*e.veg),P:cl(f*.85+.1*Math.exp(-e.d/10)-.05),K:cl(f*.8+.12*(1-e.forest)+.05),C:cl(f*.9+.2*e.forest-.05),M:cl(.3+.55*Math.exp(-e.d/12)+.1*e.veg-.1*sm(3,9,e.h)-.25*e.u),H:Math.min(8.2,6.6+1.3*(1-e.forest)*nz(x*.7,z*.7)+.2*e.fm)}}
+const withShift=o=>{const s=soilShift();return{f:cl(o.f+s),N:cl(o.N+s*.8),P:cl(o.P+s*.4),K:cl(o.K+s*.3),C:cl(o.C+s*1.3),M:cl(o.M+s*.9),H:o.H}};
+const saOf=e=>e.d<3.4?null:e.u>.34?'urban':e.fm?'farm':e.forest>.3?'forest':e.d<12?'flood':null;
+const SAI={all:{n:'Whole site',ty:'Mixed basalt-derived soils of the Nashik plateau',cr:'Grapes, onion, pomegranate, soybean, vegetables',tx:'Fertility is highest along the river and the farmland belt, and drops under built-up ground and on thin rocky slopes.'},
+ flood:{n:'River floodplain',ty:'Alluvial loam laid down by the river',cr:'Grapes, sugarcane, vegetables, fodder',tx:'River-deposited silt keeps nutrients and moisture high. The trade-off is that low ground can flood in heavy rain.'},
+ farm:{n:'Farmland belt',ty:'Medium to deep black (regur) soil',cr:'Onion, soybean, wheat, pomegranate',tx:'Deep black soil holds water and nutrients well. Nitrogen is the first to run low under repeated cropping, so compost and crop rotation matter.'},
+ forest:{n:'Forest slopes',ty:'Shallow brown soil over basalt',cr:'Native trees, pasture, agroforestry',tx:'Leaf litter builds organic carbon, but the soil is thin and stony, so it suits tree cover better than crops.'},
+ urban:{n:'Built-up area',ty:'Compacted urban fill, partly sealed',cr:'Raised-bed gardens, green roofs, street trees',tx:'Paving and compaction cut off nutrients and water. Permeable ground and compost-rich planting beds are the way to rebuild it.'}};
+const SAK=['all','flood','farm','forest','urban'],SAV={},SAC={},SF=['f','N','P','K','C','M','H'];
+SAK.forEach(k=>{SAV[k]={f:0,N:0,P:0,K:0,C:0,M:0,H:0,n:0};SAC[k]={x:0,z:0}});
+for(let x=-40;x<=40;x+=2)for(let z=-40;z<=40;z+=2){const e=env(x,z);if(e.d<3.4)continue;const o=soilAt(x,z,e);['all',saOf(e)].forEach(q=>{if(!q)return;const a=SAV[q];SF.forEach(m=>a[m]+=o[m]);a.n++;SAC[q].x+=x;SAC[q].z+=z})}
+SAK.forEach(k=>{const a=SAV[k],n=a.n||1;SF.forEach(m=>a[m]/=n);SAC[k].x/=n;SAC[k].z/=n});
+const SAKV=SAK.filter(k=>SAV[k].n>0);if(!SAV[ST.sa]||!SAV[ST.sa].n)ST.sa='all';
+const fst=f=>f>=.7?['Highly fertile',CO.g]:f>=.5?['Moderately fertile',CO.warn]:f>=.3?['Low fertility',CO.crit]:['Poor soil',CO.crit];
+const lv=v=>v>=.66?['High',CO.g]:v>=.4?['Medium',CO.warn]:['Low',CO.crit];
+const phl=h=>h<=7.5?['Ideal',CO.g]:h<=8?['Slightly alkaline',CO.t]:['Alkaline',CO.warn];
+const SB=[['Nitrogen (N)','N'],['Phosphorus (P)','P'],['Potassium (K)','K'],['Organic carbon','C'],['Soil moisture','M']];
+$('snu').innerHTML=SB.map((b,i)=>`<div class="fc"><div><span>${b[0]}</span><b id="sv${i}">—</b></div><div class="br"><i id="sb${i}"></i></div></div>`).join('')+`<div class="fc"><div><span>Soil pH</span><b id="sv5">—</b></div><div class="br"><i id="sb5"></i></div></div>`;
+$('sac').innerHTML=SAKV.map(k=>`<button class="chip" data-a="${k}">${SAI[k].n}</button>`).join('');
+function soilUI(){const k=ST.sa,a=withShift(SAV[k]),[st,c]=fst(a.f),[nl,nc]=lv((a.N+a.P+a.K+a.C)/4),I=SAI[k];
+ $('sfn').textContent=Math.round(a.f*100);$('sfs').innerHTML=`/ 100 · <span style="color:${c}">${st}</span>`;$('snl').innerHTML=`<span style="color:${nc}">${nl}</span>`;
+ SB.forEach((b,i)=>{const v=a[b[1]],[l,col]=lv(v);$('sv'+i).innerHTML=`<span style="color:${col}">${l}</span> · ${Math.round(v*100)}`;const bar=$('sb'+i);bar.style.width=Math.round(v*100)+'%';bar.style.background=col});
+ const [pl,pc]=phl(a.H);$('sv5').innerHTML=`<span style="color:${pc}">${pl}</span> · ${a.H.toFixed(1)}`;$('sb5').style.width=Math.round(cl((a.H-5.5)/3.5)*100)+'%';$('sb5').style.background=pc;
+ $('sty').textContent=I.ty;$('scr').textContent=I.cr;$('sxt').textContent=I.tx;
+ document.querySelectorAll('#sac .chip').forEach(c=>c.classList.toggle('on',c.dataset.a===k));
+ $('b-sf').textContent=ST.soil?'HIDE FERTILITY MAP':'SHOW FERTILITY ON MAP'}
+function setSoil(on){ST.soil=on?1:0;refresh()}
+$('b-sf').onclick=()=>setSoil(!ST.soil);
+document.querySelectorAll('#sac .chip').forEach(c=>c.onclick=()=>{ST.sa=c.dataset.a;ST.soil=1;refresh();const q=SAC[ST.sa];GL.flyTo&&(ST.sa==='all'?GL.flyTo(0,0,62):GL.flyTo(q.x,q.z,46))});
+function showSoil(x,z){ST.zone=null;GL.sel&&GL.sel(null);const e=env(x,z),o=withShift(soilAt(x,z,e)),[st,c]=fst(o.f),[nl,nc]=lv((o.N+o.P+o.K+o.C)/4),k=saOf(e),I=SAI[k]||SAI.all,[pl,pc]=phl(o.H);
+ const r=(n,v)=>{const[l,col]=lv(v);return`<div class="row"><span>${n}</span><b style="color:${col}">${l}</b></div>`};
+ openInfo(`<div class="lbl">LAND FERTILITY</div><div class="big">${Math.round(o.f*100)}<small> / 100</small></div><div style="color:${c};font-weight:700;margin:2px 0 12px">${st}</div><div class="row"><span>Nutrition level</span><b style="color:${nc}">${nl}</b></div>${SB.map(b=>r(b[0],o[b[1]])).join('')}<div class="row"><span>Soil pH</span><b style="color:${pc}">${o.H.toFixed(1)} · ${pl}</b></div><div class="row"><span>Soil type</span><b style="text-align:right;max-width:55%">${I.ty}</b></div><div class="row"><span>Year · scenario</span><b>${Math.round(2026+ST.t*4)} · ${ST.scen==='iv'?'Intervene':'Do nothing'}</b></div><span class="tag">MODELLED DEMO DATA · NOT A LAB SOIL TEST</span>`);ST.soilPt={x,z}}
+/* ===== 3D digital twin ===== */
+let R=null;try{R=new THREE.WebGLRenderer({canvas:$('c'),antialias:!mob,powerPreference:'low-power'})}catch(e){}
+if(!R){document.body.classList.add('nogl')}else{
+const LOW=mob||(navigator.hardwareConcurrency||8)<=4,SZ=84,SEG=LOW?72:104,cv=$('c');R.setPixelRatio(Math.min(devicePixelRatio,mob?1.25:1.75));
+const sc=new THREE.Scene();sc.background=new THREE.Color('#071412');sc.fog=new THREE.Fog('#071412',80,170);
+const cam=new THREE.PerspectiveCamera(42,1,.5,320);
+sc.add(new THREE.HemisphereLight('#dfe9e0','#1a2b27',.9));R.shadowMap.enabled=!LOW;R.shadowMap.type=THREE.PCFSoftShadowMap;const sun=new THREE.DirectionalLight('#fff1d8',1);sun.position.set(-40,60,25);sun.castShadow=!LOW;{const q=sun.shadow;q.mapSize.set(2048,2048);Object.assign(q.camera,{left:-52,right:52,top:52,bottom:-52,near:10,far:170});q.bias=-.0006;q.normalBias=.35}sc.add(sun);
+const geo=new THREE.PlaneGeometry(SZ,SZ,SEG,SEG);geo.rotateX(-Math.PI/2);const P=geo.attributes.position,N=P.count,E=[],ZONE=[],ZS=new Float32Array(N);
+const cs={};for(let i=0;i<N;i++){const x=P.getX(i),z=P.getZ(i),e=env(x,z);P.setY(i,e.h);E.push(e);ZS[i]=z;const zn=zoneOf(e);ZONE.push(zn);if(zn){(cs[zn]=cs[zn]||{x:0,y:0,z:0,n:0});const c=cs[zn];c.x+=x;c.y+=e.h;c.z+=z;c.n++}}
+geo.computeVertexNormals();const col=new Float32Array(N*3);geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+const terr=new THREE.Mesh(geo,new THREE.MeshLambertMaterial({vertexColors:true}));terr.receiveShadow=true;sc.add(terr);
+const cc=h=>new THREE.Color(h),BASE=E.map((e,i)=>{const x=P.getX(i),z=P.getZ(i),n1=nz(x*1.7,z*1.7),n2=nz(x*3.9+9,z*3.3);
+let c=cc('#587a4f').lerp(cc('#6f8a55'),n1).lerp(cc('#8a8f58'),sm(.55,.9,n2)*(1-e.veg)*.8).lerp(cc('#2f5239'),e.forest*.9);
+if(e.fm){const gx=Math.floor((x+z*.4)/2.6),gz=Math.floor((z-x*.25)/3.4),k=Math.abs((Math.sin(gx*12.9+gz*78.2)*43758.5)%1);c=cc(['#8d9358','#a79c60','#6f8d4f','#5f8a48','#b0a066'][Math.floor(k*5)%5]).lerp(c,.2)}
+c.lerp(cc('#6e7068'),sm(.25,.7,e.u)*.9);if(e.d<6)c.lerp(cc('#4a6e48'),.35*(1-e.d/6));if(e.d<3.6&&e.h<1)c.lerp(cc('#9d9f7c'),.6);
+return c.multiplyScalar(.84+.2*sm(-3,5,e.h)+(n2-.5)*.12)});
+const FERT=E.map((e,i)=>soilAt(P.getX(i),P.getZ(i),e).f),FLO=cc('#C96B62'),FMD=cc('#D69A55'),FHI=cc('#7fc08a'),FT=new THREE.Color();const vis={s:0,r:0,f:0},tg={s:0,r:0,f:0};let hov=null,sel=null,scanZ=0,scanOn=0,dirty=1;
+const tmp=new THREE.Color(),DRY=cc('#a8905a'),LUSH=cc('#4e9058'),HEAT=cc('#D69A55'),CRIT=cc('#C96B62'),HI=cc('#F2F3EA'),SCC=cc('#B8D9C1');
+const HZ={heat:'urban'};function recolor(){const hv=HZ[hov]||hov,sl=HZ[sel]||sel,SHv=vis.f>0?soilShift():0;for(let i=0;i<N;i++){const e=E[i];tmp.copy(BASE[i]);const vw=e.veg*(1-e.u);
+ if(vis.s>0)tmp.lerp(DRY,Math.min(1,vis.s*(.35+vw*.9)));if(vis.r>0)tmp.lerp(LUSH,vis.r*vw*.55);
+ const h=vis.s*(e.u+(1-e.veg)*.35);if(h>0)tmp.lerp(h>.45?CRIT:HEAT,Math.min(.6,h*.7));
+ if(vis.f>0){const f=cl(FERT[i]+SHv);f<.5?FT.copy(FLO).lerp(FMD,f/.5):FT.copy(FMD).lerp(FHI,(f-.5)/.5);tmp.lerp(FT,vis.f*.8)}
+ const z=ZONE[i];if(z&&(z===hv||z===sl))tmp.lerp(HI,z===hv?.25:.18);
+ if(scanOn){const dz=Math.abs(ZS[i]-scanZ);if(dz<2.4)tmp.lerp(SCC,.6*(1-dz/2.4))}
+ col[i*3]=tmp.r;col[i*3+1]=tmp.g;col[i*3+2]=tmp.b}geo.attributes.color.needsUpdate=true}
+function ribbon(pts,w,dy,mat){const v=[],ix=[],uv=[];pts.forEach((p,i)=>{const a=pts[Math.max(0,i-1)],b=pts[Math.min(pts.length-1,i+1)];let dx=b[0]-a[0],dz=b[1]-a[1];const m=Math.hypot(dx,dz)||1;dx/=m;dz/=m;const ww=typeof w==='function'?w(i/(pts.length-1)):w;
+[-1,1].forEach(s=>{const x=p[0]-dz*ww*s/2,z=p[1]+dx*ww*s/2;v.push(x,(p[2]!=null?p[2]:hgt(x,z))+dy,z);uv.push(s>0?1:0,i*.12)});if(i)ix.push(2*i-2,2*i-1,2*i,2*i-1,2*i+1,2*i)});
+const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(v,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));g.setIndex(ix);g.computeVertexNormals();const m=new THREE.Mesh(g,mat);m.receiveShadow=true;sc.add(m);return m}
+const rv=[];for(let z=-42;z<=42;z+=1.5)rv.push([rx(z),z,hgt(rx(z),z)+.55]);
+const wTex=(()=>{const c=document.createElement('canvas');c.width=64;c.height=256;const g=c.getContext('2d'),gr=g.createLinearGradient(0,0,64,0);['#6fb5a6','#4c9aa8','#2f7490','#4c9aa8','#6fb5a6'].forEach((k,i)=>gr.addColorStop(i/4,k));g.fillStyle=gr;g.fillRect(0,0,64,256);g.globalAlpha=.3;for(let i=0;i<60;i++){g.fillStyle=i%2?'#e2f6f2':'#1c5870';g.fillRect(6+Math.random()*52,Math.random()*256,1+Math.random()*2,6+Math.random()*24)}const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;return t})();
+const wMat=new THREE.MeshStandardMaterial({map:wTex,roughness:.18,metalness:.25,transparent:true,opacity:.9,emissive:'#5FA8B8',emissiveIntensity:.06});
+ribbon(rv.map(p=>[p[0],p[1],p[2]-.18]),7.4,0,new THREE.MeshLambertMaterial({color:'#8a9a76'}));ribbon(rv,5.2,0,wMat);
+const rd=new THREE.MeshLambertMaterial({color:'#3b3f3c'}),ed=new THREE.MeshLambertMaterial({color:'#8d918a'}),bm=new THREE.MeshLambertMaterial({color:'#9a9c94'}),ln=(f,a,b,s=2)=>{const r=[];for(let t=a;t<=b;t+=s)r.push(f(t));return r};
+const bx=(w,h,d,x,y,z)=>{const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),bm);o.position.set(x,y,z);o.castShadow=true;return o};
+const RD=[[ln(t=>[-40+t,-12+Math.sin(t*.09)*5+t*.12],0,80,1.5),1.5],[ln(t=>[-14+Math.sin(t*.08)*4+t*.05,-42+t],0,84,1.5),1.2],[ln(t=>[8+t*.4,-40+t+Math.sin(t*.1)*3],0,70,1.5),1]];
+RD.forEach(([p,w])=>{let bi=-1,bd=6;p.forEach((q,i)=>{const d=Math.abs(q[0]-rx(q[1]));if(d<bd){bd=d;bi=i}});if(bi<3||bi>p.length-4)return;
+const q=p[bi],a=p[bi-1],b=p[bi+1],ang=Math.atan2(b[0]-a[0],b[1]-a[1]),sx=Math.sin(ang)*4.5,sz=Math.cos(ang)*4.5,y=Math.max(hgt(q[0]+sx,q[1]+sz),hgt(q[0]-sx,q[1]-sz))+.3,dp=y-hgt(q[0],q[1]);
+for(let k=-2;k<=2;k++)p[bi+k][2]=y;[-3,3].forEach(k=>p[bi+k][2]=(y+hgt(p[bi+k][0],p[bi+k][1]))/2);
+const g=new THREE.Group();g.add(bx(w+.9,.3,9,0,.12,0),bx(.14,.4,9,-(w/2+.4),.4,0),bx(.14,.4,9,w/2+.4,.4,0),bx(w*.7,dp,.5,0,-dp/2,-3),bx(w*.7,dp,.5,0,-dp/2,3));g.position.set(q[0],y,q[1]);g.rotation.y=ang;sc.add(g)});
+RD.forEach(([p,w])=>{const f=u=>w*(1+.14*Math.sin(u*11+w*3));ribbon(p,u=>f(u)+.5,.22,ed);ribbon(p,f,.28,rd)});
+for(let a=0;a<3;a++)for(let b=a+1;b<3;b++){let m=9,pt=null;RD[a][0].forEach(p=>RD[b][0].forEach(q=>{const d=Math.hypot(p[0]-q[0],p[1]-q[1]);if(d<m){m=d;pt=[(p[0]+q[0])/2,(p[1]+q[1])/2]}}));if(pt&&m<1.4){const c=new THREE.Mesh(new THREE.CylinderGeometry(1.5,1.5,.12,16),rd);c.position.set(pt[0],hgt(pt[0],pt[1])+.3,pt[1]);sc.add(c)}}
+const rnd=(()=>{let s=7;return()=>(s=(s*16807)%2147483647)/2147483647})(),dm=new THREE.Object3D();
+const bgm=new THREE.BoxGeometry(1,1,1);bgm.translate(0,.5,0);const rgm=new THREE.ConeGeometry(.7071,1,4);rgm.rotateY(Math.PI/4);rgm.translate(0,.5,0);
+const BMAX=300,bM=new THREE.InstancedMesh(bgm,new THREE.MeshLambertMaterial({color:'#fff'}),BMAX),rM=new THREE.InstancedMesh(rgm,new THREE.MeshLambertMaterial({color:'#fff'}),BMAX);bM.castShadow=rM.castShadow=true;let bn=0;
+const WALL=['#cfc9b8','#b9b6a8','#d6cdb4','#a9aea6','#c9bfae'],ROOF=['#a5634a','#8a5a48','#7d817c','#6d7570','#b07a58'],ZX=[[URB.x+7,URB.z+7,3.2],[18,6,2.2]];
+function put(x,z,w,h,d,rot,wall,rh,roof){const y=env(x,z).h-.05;dm.position.set(x,y,z);dm.scale.set(w,h,d);dm.rotation.set(0,rot,0);dm.updateMatrix();bM.setMatrixAt(bn,dm.matrix);bM.setColorAt(bn,cc(wall));dm.position.y=y+h;dm.scale.set(w*1.06,rh,d*1.06);dm.updateMatrix();rM.setMatrixAt(bn,dm.matrix);rM.setColorAt(bn,cc(roof));bn++}
+function settle(cx,cz,sp,n,mx,dense){for(let k=0;k<3000&&n>0&&bn<BMAX-4;k++){const x=cx+(rnd()-.5)*sp,z=cz+(rnd()-.5)*sp,e=env(x,z);if(e.d<5||e.h<-1||(dense&&e.u<.18)||ZX.some(a=>Math.hypot(x-a[0],z-a[1])<a[2]+1))continue;
+const big=rnd()<.06,w=big?2.4+rnd()*1.2:.9+rnd()*1.1,d=big?2+rnd():.9+rnd()*1.1,h=(.45+rnd()*1.1)*(.5+(dense?e.u:.6))*mx*(big?1.5:1),pit=!big&&h<1.5&&rnd()<.75;
+put(x,z,w,h,d,(nz(x*.25,z*.25)>.5?.38:-.22)+(rnd()-.5)*.18,WALL[Math.floor(rnd()*5)],pit?.4+rnd()*.3:.07,pit?ROOF[Math.floor(rnd()*5)]:'#6f7370');n--}}
+settle(30,20,9,22,.7,0);
+[[URB.x+2,URB.z-1,1.8,4.6],[URB.x-4,URB.z+3,1.5,3.6]].forEach(a=>put(a[0],a[1],a[2],a[3],a[2],.38,'#b8bdb8',.1,'#6a6f6c'));
+settle(URB.x,URB.z,30,235,1.15,1);sc.add(bM,rM);
+/* subtle landmarks: park, retention ponds, drainage channel */
+const pondM=new THREE.MeshStandardMaterial({color:'#4a8ea0',roughness:.2,metalness:.2,transparent:true,opacity:.9});
+const flat=(x,z,r,mat,dy)=>{let y=hgt(x,z);for(let k=0;k<6;k++)y=Math.max(y,hgt(x+Math.cos(k)*r,z+Math.sin(k)*r));const m=new THREE.Mesh(new THREE.CircleGeometry(r,24),mat);m.rotation.x=-Math.PI/2;m.position.set(x,y+dy,z);m.receiveShadow=true;sc.add(m)};
+flat(ZX[0][0],ZX[0][1],3.2,new THREE.MeshLambertMaterial({color:'#5f9a58'}),.12);flat(ZX[0][0]+.8,ZX[0][1]-.6,1,pondM,.2);flat(18,6,2.2,pondM,.15);
+ribbon(ln(t=>[30-t,12+Math.sin(t*.25)*.8],0,24,1.5),.8,.34,pondM);
+const iM=new THREE.InstancedMesh(bgm,new THREE.MeshLambertMaterial({color:'#7d817c'}),4);[[-6,26,5,2.2,3.2],[-1,30,3.5,1.6,2.6],[-10,31,4,1.8,2.4],[-3,23,3,1.4,2.4]].forEach((a,i)=>{dm.position.set(a[0],env(a[0],a[1]).h-.05,a[1]);dm.scale.set(a[2],a[3],a[4]);dm.rotation.y=0;dm.updateMatrix();iM.setMatrixAt(i,dm.matrix)});sc.add(iM);
+const wind={value:0};
+function sway(m){m.onBeforeCompile=s=>{s.uniforms.uT=wind;s.vertexShader='uniform float uT;\n'+s.vertexShader.replace('#include <begin_vertex>','vec3 transformed=vec3(position);float ph=instanceMatrix[3].x*.6+instanceMatrix[3].z*.4;transformed.x+=sin(uT*1.4+ph)*.08*max(position.y,0.);transformed.z+=cos(uT*1.1+ph)*.06*max(position.y,0.);')}}
+const VG=[];
+function veg(geo,N,pal,ok,sz){const m=new THREE.MeshLambertMaterial({color:'#fff',flatShading:true});sway(m);const im=new THREE.InstancedMesh(geo,m,N),B=[];let n=0;
+for(let k=0;k<7000&&n<N;k++){const x=(rnd()-.5)*SZ*.96,z=(rnd()-.5)*SZ*.96,e=env(x,z);if(e.d<3.3||e.u>.3||!ok(e,x,z))continue;const q=sz(e);dm.position.set(x,e.h-.2,z);dm.scale.set(q*(.85+rnd()*.3),q*(.8+rnd()*.7),q*(.85+rnd()*.3));dm.rotation.set(0,rnd()*6,0);dm.updateMatrix();im.setMatrixAt(n,dm.matrix);B.push(cc(pal[Math.floor(rnd()*pal.length)]).lerp(cc('#5a7a4a'),rnd()*.4).multiplyScalar(.82+rnd()*.35));n++}
+im.castShadow=true;sc.add(im);VG.push({im,B,n})}
+const g1=new THREE.IcosahedronGeometry(1,1);g1.translate(0,1.7,0);const g2=new THREE.ConeGeometry(.75,3.2,7);g2.translate(0,1.7,0);const g3=new THREE.IcosahedronGeometry(.6,0);g3.translate(0,.35,0);
+veg(g1,LOW?380:620,['#3f6b46','#4c7a4a','#5f8a58','#356043','#6a8f52'],(e,x,z)=>e.fm?rnd()<.03:rnd()<(.12+e.forest)*(.35+1.3*Math.pow(nz(x*.9,z*.9),2)),e=>.5+rnd()*.7+e.forest*.25);
+veg(g2,LOW?110:200,['#2c523b','#2f5a40','#3a6347'],e=>e.h>2.4&&!e.fm&&rnd()<.6*e.forest,()=>.55+rnd()*.5);
+veg(g3,LOW?150:320,['#5d8750','#6b8f4e','#7d9a58','#4f7c4c'],e=>!e.fm&&(e.d<8?rnd()<.6:rnd()<.07+.1*e.veg),()=>.6+rnd()*.5);
+function tint(){VG.forEach(o=>{for(let i=0;i<o.n;i++){tmp.copy(o.B[i]).lerp(DRY,vis.s*.8).lerp(LUSH,vis.r*.35);o.im.setColorAt(i,tmp)}o.im.instanceColor.needsUpdate=true;o.im.count=Math.min(o.n,Math.round(o.n*(1-.25*vis.s+.1*vis.r)))})}
+
+/* intervention objects: green corridors + retention ponds */
+const cMat=new THREE.MeshBasicMaterial({color:'#7fc08a',transparent:true,opacity:0,depthWrite:false});
+const cor=[ribbon(ln(t=>[24-t*.5,-20+t*.4+Math.sin(t*.15)*2],0,56,2),2.6,.3,cMat),ribbon(ln(t=>[-26+t*.62,-22+t*.62],0,56,2),2.2,.3,cMat)];
+const pMat=new THREE.MeshStandardMaterial({color:'#5FA8B8',transparent:true,opacity:0,roughness:.2}),ponds=[];
+[[-14,8],[10,10],[24,24],[-4,-18]].forEach(a=>{const x=rx(a[1])+(a[0]>0?7:-7),m=new THREE.Mesh(new THREE.CylinderGeometry(2.4,2.4,.25,20),pMat);m.position.set(x,hgt(x,a[1])+.25,a[1]);sc.add(m);ponds.push(m)});
+/* markers: floating 3D scientific symbols */
+const mkG=new THREE.Group(),mks=[];sc.add(mkG);
+const gt=(()=>{const c=document.createElement('canvas');c.width=c.height=64;const g=c.getContext('2d'),r=g.createRadialGradient(32,32,0,32,32,32);r.addColorStop(0,'rgba(255,255,255,.9)');r.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=r;g.fillRect(0,0,64,64);return new THREE.CanvasTexture(c)})();
+const hm=c=>new THREE.MeshPhongMaterial({color:c,emissive:c,emissiveIntensity:.5,shininess:90,transparent:true,opacity:.9}),ms=(g,m,x=0,y=0,z=0)=>{const o=new THREE.Mesh(g,m);o.position.set(x,y,z);return o};
+function mkBird(c){const g=new THREE.Group(),m=hm(c),b=ms(new THREE.SphereGeometry(.3,10,8),m);b.scale.set(.7,.6,1.7);const wg=new THREE.BoxGeometry(.95,.04,.45);wg.translate(.5,0,0);const w1=ms(wg,m),w2=ms(wg,m);w2.rotation.y=Math.PI;g.add(b,w1,w2);g.userData.w=[w1,w2];return g}
+const dropG=new THREE.LatheGeometry(Array.from({length:19},(_,i)=>{const a=i/18*Math.PI;return new THREE.Vector2(.78*Math.sin(a)*Math.cos(a/2),-.9*Math.cos(a))}),20);
+const SY={water:c=>{const g=new THREE.Group();g.add(ms(dropG,hm(c)));return g},
+vegetation:c=>{const g=new THREE.Group(),m=hm(c);g.add(ms(new THREE.ConeGeometry(.7,1.1,7),m,0,.35,0),ms(new THREE.ConeGeometry(.55,.95,7),m,0,.95,0),ms(new THREE.CylinderGeometry(.1,.12,.5,6),m,0,-.45,0));return g},
+heat:c=>{const g=new THREE.Group(),m=hm(c);g.add(ms(new THREE.CylinderGeometry(.16,.16,1.5,10),m,0,.15,0),ms(new THREE.SphereGeometry(.4,14,10),m,0,-.7,0));[.5,.9].forEach((y,i)=>g.add(ms(new THREE.TorusGeometry(.35+i*.12,.035,6,18,Math.PI*.9),m,.55,y-.2,0)));return g},
+biodiversity:c=>{const g=mkBird(c);g.scale.setScalar(1.3);return g},
+flood:c=>{const g=new THREE.Group(),m=hm(c);g.add(ms(new THREE.CylinderGeometry(.55,.55,1.6,16,1,true),new THREE.MeshBasicMaterial({color:c,wireframe:true,transparent:true,opacity:.35})),ms(new THREE.CylinderGeometry(.5,.5,.8,16),m,0,-.4,0));[.2,.6].forEach(y=>{const t=ms(new THREE.TorusGeometry(.56,.025,5,20),m,0,y,0);t.rotation.x=Math.PI/2;g.add(t)});return g},
+urban:c=>{const g=new THREE.Group(),m=hm(c);[[-.45,.55,.9],[0,.55,1.6],[.45,.5,1.1]].forEach(a=>g.add(ms(new THREE.BoxGeometry(a[1],a[2],a[1]),m,a[0],-.8+a[2]/2,0)));return g}};
+const MK=[['water',rx(0),0,CO.w],['vegetation',24,-20,CO.g],['urban',URB.x,URB.z,CO.warn],['flood',rx(18)-6,18,CO.crit],['biodiversity',-12,-8,CO.t],['heat',-29,22,'#e0a060']];
+MK.forEach(([k,x,z,c])=>{const y0=hgt(x,z),sy=SY[k](c),g=new THREE.Group(),m=ms(new THREE.SphereGeometry(1.5,10,8),new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false})),
+r=ms(new THREE.RingGeometry(.8,.95,32),new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:.6,side:2,depthWrite:false})),
+gl=ms(new THREE.CircleGeometry(2.6,24),new THREE.MeshBasicMaterial({map:gt,color:c,transparent:true,opacity:.35,depthWrite:false,blending:THREE.AdditiveBlending})),
+st=ms(new THREE.CylinderGeometry(.025,.025,2.4,4),new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:.4}),x,y0+1.5,z);
+r.rotation.x=gl.rotation.x=-Math.PI/2;r.position.set(x,y0+.35,z);gl.position.set(x,y0+.3,z);sy.scale.setScalar(.85);g.position.set(x,y0+3.3,z);g.add(sy);m.position.copy(g.position);m.userData={zone:k};mkG.add(g,m,r,gl,st);mks.push({m,r,g,sy,k,y:y0+3.3})});
+/* subtle data flow: water -> vegetation -> biodiversity */
+const BEAM=[['water','vegetation'],['vegetation','biodiversity']].map(([a,b],i)=>{const pa=mks.find(q=>q.k===a).g.position.clone(),pb=mks.find(q=>q.k===b).g.position.clone(),mid=pa.clone().add(pb).multiplyScalar(.5);mid.y+=7+i*2;const cv=new THREE.QuadraticBezierCurve3(pa,mid,pb);
+sc.add(new THREE.Mesh(new THREE.TubeGeometry(cv,40,.035,5,false),new THREE.MeshBasicMaterial({color:'#9fd6c2',transparent:true,opacity:.2,depthWrite:false})));
+const arr=new Float32Array(14*3),g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(arr,3));sc.add(new THREE.Points(g,new THREE.PointsMaterial({color:'#d4f5e6',size:.2,transparent:true,opacity:.7,depthWrite:false})));return{cv,arr,g}});
+const OBT=['Bird','Plant','Photograph'],OTC={Bird:CO.t,Plant:CO.g,Photograph:CO.w},oG=new THREE.Group(),obs=[];sc.add(oG);
+for(let k=0;k<900&&obs.length<24;k++){const x=(rnd()-.5)*70,z=(rnd()-.5)*70,e=env(x,z);if(e.bio<.42||e.u>.2||e.h<-1.2)continue;const ty=OBT[obs.length%3],m=new THREE.Mesh(new THREE.SphereGeometry(.38,10,8),new THREE.MeshBasicMaterial({color:OTC[ty]}));m.position.set(x,e.h+1.3,z);m.userData={type:ty,o:1};oG.add(m);obs.push(m)}
+/* particles: river flow + wind */
+const FN=mob?40:90,fp=new Float32Array(FN*3),fo=Array.from({length:FN},()=>({u:rnd(),off:(rnd()-.5)*2.4,s:.05+rnd()*.05}));
+const fg=new THREE.BufferGeometry();fg.setAttribute('position',new THREE.BufferAttribute(fp,3));sc.add(new THREE.Points(fg,new THREE.PointsMaterial({color:'#bfe6f0',size:.22,transparent:true,opacity:.8,depthWrite:false})));
+const WN=mob?50:110,wp=new Float32Array(WN*3);for(let i=0;i<WN;i++)wp.set([(rnd()-.5)*80,2+rnd()*10,(rnd()-.5)*80],i*3);
+const wg=new THREE.BufferGeometry();wg.setAttribute('position',new THREE.BufferAttribute(wp,3));sc.add(new THREE.Points(wg,new THREE.PointsMaterial({color:'#dfeadd',size:.14,transparent:true,opacity:.35,depthWrite:false})));
+const FL=[0,1,2,3,4].map(()=>{const b=mkBird('#e9f2e4');b.scale.setScalar(.55);sc.add(b);return b});
+const HN=36,hp=new Float32Array(HN*3),hmat=new THREE.PointsMaterial({color:'#f0b878',size:.3,transparent:true,opacity:.2,depthWrite:false}),hg=new THREE.BufferGeometry();for(let i=0;i<HN;i++)hp.set([URB.x+(rnd()-.5)*18,1+rnd()*5,URB.z+(rnd()-.5)*18],i*3);hg.setAttribute('position',new THREE.BufferAttribute(hp,3));sc.add(new THREE.Points(hg,hmat));
+/* scan curtain */
+const scM=new THREE.Mesh(new THREE.PlaneGeometry(SZ+10,14),new THREE.MeshBasicMaterial({color:'#B8D9C1',transparent:true,opacity:0,side:2,depthWrite:false,blending:THREE.AdditiveBlending}));sc.add(scM);let scT=0,scD=1;
+GL.scan=d=>{scT=performance.now();scD=d;scanOn=1};
+/* camera */
+const O={th:.6,ph:.7,r:140,tx:0,tz:0},T={th:.9,ph:1,r:76,tx:0,tz:0};let idle=performance.now()+3000;
+const PRE={hero:[78,1,0,0],twin:[56,.95,0,0],health:[92,1.1,0,0],systems:[108,.85,0,0],sim:[64,.92,-4,0],ivs:[50,.85,-10,8],bio:[48,.9,6,-4],soil:[60,.95,-2,4],why:[84,1.1,0,0],cta:[100,.9,0,0]};
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const p=PRE[e.target.id];if(p&&performance.now()>idle-2500){T.r=p[0];T.ph=p[1];T.tx=p[2];T.tz=p[3]}}}),{rootMargin:'-45% 0px -45% 0px'});
+document.querySelectorAll('.sec').forEach(s=>io.observe(s));
+const bo=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add('in')),{threshold:.15});document.querySelectorAll('.box').forEach(b=>bo.observe(b));
+let dr=null,mv=0;const ptr=new Map();let pinch=0;
+cv.addEventListener('pointerdown',e=>{ptr.set(e.pointerId,e);dr={x:e.clientX,y:e.clientY};mv=0;idle=performance.now()+4000});
+cv.addEventListener('pointermove',e=>{if(ptr.has(e.pointerId))ptr.set(e.pointerId,e);
+ if(ptr.size===2){const[a,b]=[...ptr.values()],d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);if(pinch)T.r=Math.min(130,Math.max(24,T.r*pinch/d));pinch=d;return}
+ if(dr&&e.buttons){const dx=e.clientX-dr.x,dy=e.clientY-dr.y;mv+=Math.abs(dx)+Math.abs(dy);dr.x=e.clientX;dr.y=e.clientY;if(e.shiftKey||e.button===2){const k=T.r*.0016;T.tx=Math.max(-35,Math.min(35,T.tx-(Math.cos(T.th)*dx+Math.sin(T.th)*dy)*k));T.tz=Math.max(-35,Math.min(35,T.tz+(Math.sin(T.th)*dx-Math.cos(T.th)*dy)*k))}else{T.th-=dx*.006;T.ph=Math.min(1.35,Math.max(.4,T.ph-dy*.005))}idle=performance.now()+4000}
+ else if(!ptr.size||e.pointerType==='mouse')hover(e)});
+const upf=e=>{if(dr&&mv<6&&e.type==='pointerup')click(e);ptr.delete(e.pointerId);pinch=0;dr=null};cv.addEventListener('pointerup',upf);cv.addEventListener('pointercancel',upf);cv.addEventListener('pointerleave',()=>{hov=null;$('tip').style.opacity=0;dirty=1});
+cv.addEventListener('contextmenu',e=>e.preventDefault());$('zi').onclick=()=>T.r=Math.max(24,T.r*.8);$('zo').onclick=()=>T.r=Math.min(130,T.r*1.25);
+const zt=z=>ZN[z].t+'  ·  '+indVals(ST.scen,ST.t)[ZN[z].i]+' / 100',rc=new THREE.Raycaster(),mp=new THREE.Vector2();let lastH=0;
+function pick(e,list){mp.set(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1);rc.setFromCamera(mp,cam);return rc.intersectObjects(list,false)[0]}
+function hover(e){const n=performance.now();if(n-lastH<60)return;lastH=n;const mh=pick(e,[...mks.map(a=>a.m),...obs.filter(o=>o.visible)]);let z=null,txt='';
+ if(mh){z=mh.object.userData.zone||null;txt=z?zt(z):'OBSERVATION · '+mh.object.userData.type;cv.style.cursor='pointer'}
+ else{const h=pick(e,[terr]);z=h?ZONE[h.face.a]:null;if(z)txt=zt(z);if(ST.soil&&h){txt='SOIL FERTILITY  ·  '+Math.round(cl(FERT[h.face.a]+soilShift())*100)+' / 100';cv.style.cursor='pointer'}else cv.style.cursor=z?'pointer':'grab'}
+ if(z!==hov){hov=z&&!mh?z:z;dirty=1}const tip=$('tip');if(txt){tip.textContent=txt;tip.style.left=e.clientX+14+'px';tip.style.top=e.clientY+14+'px';tip.style.opacity=1}else tip.style.opacity=0}
+function click(e){const mh=pick(e,[...mks.map(a=>a.m),...obs.filter(o=>o.visible)]);if(mh){const u=mh.object.userData;u.zone?showZone(u.zone):showObs(u);return}const h=pick(e,[terr]),z=h&&ZONE[h.face.a];if(ST.soil&&h)showSoil(h.point.x,h.point.z);else if(z)showZone(z);else closeInfo()}
+GL.sel=z=>{sel=z;dirty=1};GL.vis=()=>{tg.s=cl(ST.t*(1-.9*sE()));tg.r=ST.t*sE();tg.f=ST.soil?1:0;dirty=1};
+GL.flyTo=(x,z,r)=>{T.tx=Math.max(-35,Math.min(35,x*.7));T.tz=Math.max(-35,Math.min(35,z*.7));T.r=r||46;T.ph=.9;idle=performance.now()+5000};GL.fly=k=>{const c=cs[k];if(c){T.tx=c.x/c.n*.7;T.tz=c.z/c.n*.7;T.r=46;T.ph=.9;idle=performance.now()+5000}};
+/* observation chips */
+$('obsc').innerHTML=OBT.map(t=>`<button class="chip" data-t="${t}"><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${OTC[t]};margin-right:7px"></i>${t} <b id="oc-${t}"></b></button>`).join('');
+document.querySelectorAll('#obsc .chip').forEach(c=>c.onclick=()=>{const o=obs.find(o=>o.userData.type===c.dataset.t&&o.visible);if(o){T.tx=o.position.x*.7;T.tz=o.position.z*.7;T.r=40;idle=performance.now()+5000;showObs(o.userData)}});
+function size(){R.setSize(innerWidth,innerHeight,false);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()}addEventListener('resize',size);size();
+let lastObs=-1;
+function frame(now){requestAnimationFrame(frame);const t=now*.001;
+ for(const k of ['s','r','f']){const d=tg[k]-vis[k];if(Math.abs(d)>.001){vis[k]+=d*.08;dirty=1}}
+ if(scT){const p=(now-scT)/scD;if(p<1){scanZ=-44+88*p;scM.position.set(0,6,scanZ);scM.material.opacity=.22*Math.sin(p*Math.PI);dirty=1}else{scT=0;scanOn=0;scM.material.opacity=0;dirty=1}}
+ if(dirty){recolor();tint();dirty=0;
+  wMat.color.set('#ffffff').lerp(cc('#b8b27a'),vis.s*.8);wMat.emissiveIntensity=.06+vis.r*.1;cMat.opacity=vis.r*.8;pMat.opacity=vis.r*1.1;
+  rM.count=bM.count=Math.min(bn,Math.round(bn*.62+bn*.38*vis.s*1.0));
+  const cnt=Math.max(3,Math.round(24*(1-.55*vis.s+.5*vis.r)));obs.forEach((o,i)=>{o.visible=i<cnt;});
+  if(lastObs!==cnt){lastObs=cnt;OBT.forEach(ty=>{const el=$('oc-'+ty);if(el)el.textContent=obs.filter(o=>o.visible&&o.userData.type===ty).length})}}
+ mks.forEach(a=>{a.g.scale.setScalar(a.g.scale.x+((a.k===hov?1.3:1)-a.g.scale.x)*.15)});
+ if(!rm){mks.forEach((a,i)=>{const p=((t*.6+i*.2)%1);a.r.scale.setScalar(1+p*1.8);a.r.material.opacity=.6*(1-p);a.g.position.y=a.y+Math.sin(t*1.3+i)*.2;a.sy.rotation.y=t*.4+i;a.sy.traverse(o=>{if(o.material&&o.material.emissiveIntensity!==undefined)o.material.emissiveIntensity=.4+.2*Math.sin(t*2+i)});const w=a.sy.userData.w;if(w)w[0].rotation.z=w[1].rotation.z=Math.sin(t*4)*.4});
+ wind.value=t;wTex.offset.y-=.004;
+ BEAM.forEach(b=>{for(let j=0;j<14;j++){const p=b.cv.getPoint((t*.12+j/14)%1);b.arr[j*3]=p.x;b.arr[j*3+1]=p.y;b.arr[j*3+2]=p.z}b.g.attributes.position.needsUpdate=true});
+ FL.forEach((b,i)=>{const a=t*.18+i*1.3,r=7+i*2;b.position.set(-14+Math.cos(a)*r,hgt(-14,-14)+10+Math.sin(t*.7+i),-14+Math.sin(a)*r);b.rotation.y=-a;b.userData.w[0].rotation.z=b.userData.w[1].rotation.z=Math.sin(t*7+i)*.5});
+ for(let i=0;i<HN;i++){hp[i*3+1]+=.012;if(hp[i*3+1]>7)hp[i*3+1]=1;hp[i*3]+=Math.sin(t*2+i)*.004}hg.attributes.position.needsUpdate=true;hmat.opacity=.12+.3*vis.s;
+  for(let i=0;i<FN;i++){const o=fo[i];o.u=(o.u+o.s*.01)%1;const z=-42+84*o.u;fp[i*3]=rx(z)+o.off;fp[i*3+1]=hgt(rx(z),z)+.75;fp[i*3+2]=z}fg.attributes.position.needsUpdate=true;
+  for(let i=0;i<WN;i++){wp[i*3]+=.03;wp[i*3+2]+=.012;if(wp[i*3]>42)wp[i*3]=-42;if(wp[i*3+2]>42)wp[i*3+2]=-42}wg.attributes.position.needsUpdate=true;
+  if(now>idle)T.th+=.0007}
+ O.th+=(T.th-O.th)*.05;O.ph+=(T.ph-O.ph)*.06;O.r+=(T.r-O.r)*.035;O.tx+=(T.tx-O.tx)*.05;O.tz+=(T.tz-O.tz)*.05;
+ cam.position.set(O.tx+O.r*Math.sin(O.ph)*Math.sin(O.th),O.r*Math.cos(O.ph),O.tz+O.r*Math.sin(O.ph)*Math.cos(O.th));cam.lookAt(O.tx,2,O.tz);R.render(sc,cam)}
+if(rm){Object.assign(O,T)}dirty=1;requestAnimationFrame(frame);setTimeout(runScan,1400);
+}
+refresh();
+</script></body></html>
